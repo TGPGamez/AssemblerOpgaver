@@ -18,6 +18,7 @@ namespace VMTranslator.ParsedCommands
                 case BasicCommandsTypes.ADD:
                     return BasicLogicalTemplates.Add();
                 case BasicCommandsTypes.SUB:
+                    return BasicLogicalTemplates.Sub();
                     break;
                 case BasicCommandsTypes.NEG:
                     break;
