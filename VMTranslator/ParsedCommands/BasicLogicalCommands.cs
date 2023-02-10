@@ -1,4 +1,6 @@
-﻿namespace VMTranslator.ParsedCommands
+﻿using VMTranslator.Templates;
+
+namespace VMTranslator.ParsedCommands
 {
     public class BasicLogicalCommands : BaseVMCommand
     {
@@ -14,7 +16,7 @@
             switch (logicalCommandType)
             {
                 case BasicCommandsTypes.ADD:
-                    break;
+                    return BasicLogicalTemplates.Add();
                 case BasicCommandsTypes.SUB:
                     break;
                 case BasicCommandsTypes.NEG:

@@ -30,6 +30,5 @@ namespace VMTranslator
 
             Console.ReadKey();
         }
-        //https://github.com/CallumHoughton18/nand2tetris-in-dotnet/tree/377dbafd58823d07f59794fb2e46bbd15ea3e2e2/HackVMTranslator.Core
     }
 }
