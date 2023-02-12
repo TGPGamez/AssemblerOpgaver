@@ -19,7 +19,13 @@ namespace VMTranslator.ParsedCommands
             if (TryParseMemoryAccessCMD(split, prefix, out BaseVMCommand? memoryAccessCommand)) { }
             if (memoryAccessCommand != null) { return memoryAccessCommand; }
 
-            throw new ArgumentException("Unsupported vm instruction.");
+            if (TryParseBranchingCMD(split, out var branchingCommand)) { }
+            if (branchingCommand != null) return branchingCommand;
+
+            if (TryParseFunctionCMD(split, uniqueId, out var functionCommand)) { }
+            if (functionCommand != null) return functionCommand;
+
+            throw new ArgumentException($"{line} is not a supported vm instruction.");
         }
 
 
@@ -65,6 +71,43 @@ namespace VMTranslator.ParsedCommands
             return false;
         }
 
-        
+
+        private static bool TryParseBranchingCMD(string[] lineSplit, out BaseVMCommand? branchingCommand)
+        {
+            if (Enum.TryParse(lineSplit[0].ToUpper().Replace("-", "_"),
+                    out BranchingCommandTypes branchingCommandType))
+            {
+                branchingCommand = new BranchingCommand(lineSplit[1], branchingCommandType);
+                return true;
+            }
+            branchingCommand = null;
+            return false;
+        }
+
+        private static bool TryParseFunctionCMD(string[] lineSplit, int uniqueCommandIndentifer,
+        out BaseVMCommand? functionCommand)
+        {
+            if (Enum.TryParse(lineSplit[0].ToUpper().Replace("-", "_"),
+                    out FunctionCommandTypes functionCommandTypes))
+            {
+                switch (functionCommandTypes)
+                {
+                    case FunctionCommandTypes.CALL:
+                        functionCommand = new CallFunctionCommand(lineSplit[1], uint.Parse(lineSplit[2]), (uint)uniqueCommandIndentifer);
+                        break;
+                    case FunctionCommandTypes.FUNCTION:
+                        functionCommand = new FunctionFunctionCommand(lineSplit[1], uint.Parse(lineSplit[2]), (uint)uniqueCommandIndentifer);
+                        break;
+                    case FunctionCommandTypes.RETURN:
+                        functionCommand = new ReturnFunctionCommand();
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                return true;
+            }
+            functionCommand = null;
+            return false;
+        }
     }
 }

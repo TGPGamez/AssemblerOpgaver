@@ -16,20 +16,19 @@ namespace VMTranslator.ParsedCommands
             switch (logicalCommandType)
             {
                 case BasicCommandsTypes.ADD:
-                    return BasicLogicalTemplates.Add();
+                    return LogicalTemplates.Add();
                 case BasicCommandsTypes.SUB:
-                    return BasicLogicalTemplates.Sub();
-                    break;
+                    return LogicalTemplates.Sub();
                 case BasicCommandsTypes.NEG:
-                    break;
+                    return LogicalTemplates.Neg();
                 case BasicCommandsTypes.AND:
-                    break;
+                    return LogicalTemplates.And();
                 case BasicCommandsTypes.OR:
-                    break;
+                    return LogicalTemplates.Or();
                 case BasicCommandsTypes.NOT:
-                    break;
+                    return LogicalTemplates.Not();
                 default:
-                    break;
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }

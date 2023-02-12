@@ -22,10 +22,12 @@ namespace VMTranslator
             int index = 0;
             while (!streamReader.EndOfStream)
             {
-                line = CodeManipulator.RemoveComments(streamReader.ReadLine());
-                if (string.IsNullOrWhiteSpace(line)) continue;
+                line = streamReader.ReadLine()?.Trim().Split("//")[0];
+                if (string.IsNullOrWhiteSpace(line) || line.StartsWith("//")) continue;
 
                 BaseVMCommand parsedCmd = line.ToParsedCommand(index, prefix);
+                string assemblyChunk = parsedCmd.ToAssembly();
+                streamWriter.Write(assemblyChunk);
 
                 index++;
             }

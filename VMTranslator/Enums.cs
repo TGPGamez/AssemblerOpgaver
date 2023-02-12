@@ -25,8 +25,8 @@ namespace VMTranslator
 
     public enum MemoryAccessCommandTypes
     {
-        POP,
-        PUSH
+        PUSH,
+        POP
     }
 
     public enum MemorySegments
@@ -39,5 +39,19 @@ namespace VMTranslator
         STATIC,
         POINTER,
         TEMP
+    }
+
+    public enum BranchingCommandTypes
+    {
+        GOTO,
+        IF_GOTO,
+        LABEL
+    }
+
+    public enum FunctionCommandTypes
+    {
+        CALL,
+        FUNCTION,
+        RETURN
     }
 }
