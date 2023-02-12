@@ -4,9 +4,9 @@ namespace VMTranslator.ParsedCommands
 {
     public class BasicLogicalCommands : BaseVMCommand
     {
-        private BasicCommandsTypes logicalCommandType;
+        private BasicCommandsType logicalCommandType;
 
-        public BasicLogicalCommands(BasicCommandsTypes logicalCommandType)
+        public BasicLogicalCommands(BasicCommandsType logicalCommandType)
         {
             this.logicalCommandType = logicalCommandType;
         }
@@ -15,17 +15,17 @@ namespace VMTranslator.ParsedCommands
         {
             switch (logicalCommandType)
             {
-                case BasicCommandsTypes.ADD:
+                case BasicCommandsType.ADD:
                     return LogicalTemplates.Add();
-                case BasicCommandsTypes.SUB:
+                case BasicCommandsType.SUB:
                     return LogicalTemplates.Sub();
-                case BasicCommandsTypes.NEG:
+                case BasicCommandsType.NEG:
                     return LogicalTemplates.Neg();
-                case BasicCommandsTypes.AND:
+                case BasicCommandsType.AND:
                     return LogicalTemplates.And();
-                case BasicCommandsTypes.OR:
+                case BasicCommandsType.OR:
                     return LogicalTemplates.Or();
-                case BasicCommandsTypes.NOT:
+                case BasicCommandsType.NOT:
                     return LogicalTemplates.Not();
                 default:
                     throw new ArgumentOutOfRangeException();

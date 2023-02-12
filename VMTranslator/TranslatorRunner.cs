@@ -1,12 +1,12 @@
 ﻿using VMTranslator;
 using VMTranslator.Templates;
 
-internal class HackVmTranslatorRunner
+internal class TranslatorRunner
 {
     private string inputFilePath;
     private string outputFilePath;
 
-    public HackVmTranslatorRunner(string inputFilePath, string outputFilePath)
+    public TranslatorRunner(string inputFilePath, string outputFilePath)
     {
         this.inputFilePath = inputFilePath;
         this.outputFilePath = outputFilePath;

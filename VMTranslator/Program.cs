@@ -26,7 +26,7 @@ namespace VMTranslator
 
             try
             {
-                HackVmTranslatorRunner runner = new HackVmTranslatorRunner(path, outputFilePath);
+                TranslatorRunner runner = new TranslatorRunner(path, outputFilePath);
                 string outputPath = runner.Run();
                 Console.WriteLine($"Assembly successful, output file path: {outputPath}");
                 Console.WriteLine("Click ESCAPE TO EXIT");

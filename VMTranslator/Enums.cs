@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VMTranslator
 {
-    public enum BasicCommandsTypes
+    public enum BasicCommandsType
     {
         ADD,
         SUB,
@@ -16,20 +16,20 @@ namespace VMTranslator
         NOT,
     }
 
-    public enum ConditionalCommandTypes
+    public enum ConditionalCommandType
     {
         EQ,
         GT,
         LT
     }
 
-    public enum MemoryAccessCommandTypes
+    public enum MemoryAccessCommandType
     {
         PUSH,
         POP
     }
 
-    public enum MemorySegments
+    public enum MemorySegment
     {
         LOCAL,
         ARGUMENT,
@@ -41,7 +41,7 @@ namespace VMTranslator
         TEMP
     }
 
-    public enum BranchingCommandTypes
+    public enum BranchingCommandType
     {
         GOTO,
         IF_GOTO,

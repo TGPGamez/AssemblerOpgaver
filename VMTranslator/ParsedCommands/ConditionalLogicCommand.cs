@@ -5,9 +5,9 @@ namespace VMTranslator.ParsedCommands
     public class ConditionalLogicCommand : BaseVMCommand
     {
         private int uniqueId;
-        private ConditionalCommandTypes conditionalLogicCommandType;
+        private ConditionalCommandType conditionalLogicCommandType;
 
-        public ConditionalLogicCommand(int uniqueId, ConditionalCommandTypes conditionalLogicCommandType)
+        public ConditionalLogicCommand(int uniqueId, ConditionalCommandType conditionalLogicCommandType)
         {
             this.uniqueId = uniqueId;
             this.conditionalLogicCommandType = conditionalLogicCommandType;
@@ -17,11 +17,11 @@ namespace VMTranslator.ParsedCommands
         {
             switch (conditionalLogicCommandType)
             {
-                case ConditionalCommandTypes.EQ:
+                case ConditionalCommandType.EQ:
                     return LogicalTemplates.EqualCommand(uniqueId);
-                case ConditionalCommandTypes.GT:
+                case ConditionalCommandType.GT:
                     return LogicalTemplates.GreaterThanCommand(uniqueId);
-                case ConditionalCommandTypes.LT:
+                case ConditionalCommandType.LT:
                     return LogicalTemplates.LessThanCommand(uniqueId);
                 default:
                     throw new ArgumentOutOfRangeException();

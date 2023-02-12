@@ -6,10 +6,10 @@ namespace VMTranslator.ParsedCommands
     {
         private int value;
         private string prefix;
-        private MemoryAccessCommandTypes memoryAccessCommandsTypes;
-        private MemorySegments memorySegment;
+        private MemoryAccessCommandType memoryAccessCommandsTypes;
+        private MemorySegment memorySegment;
 
-        public MemoryAccessCommand(int value, string prefix, MemoryAccessCommandTypes memoryAccessCommandsTypes, MemorySegments memorySegment)
+        public MemoryAccessCommand(int value, string prefix, MemoryAccessCommandType memoryAccessCommandsTypes, MemorySegment memorySegment)
         {
             this.value = value;
             this.prefix = prefix;
@@ -21,59 +21,59 @@ namespace VMTranslator.ParsedCommands
         {
             switch (memoryAccessCommandsTypes)
             {
-                case MemoryAccessCommandTypes.POP:
+                case MemoryAccessCommandType.POP:
                     return PopCommandToAssembly(prefix, memorySegment, value);
-                case MemoryAccessCommandTypes.PUSH:
+                case MemoryAccessCommandType.PUSH:
                     return PushCommandToAssembly(prefix, memorySegment, value);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        private string PopCommandToAssembly(string prefix, MemorySegments segment, int address)
+        private string PopCommandToAssembly(string prefix, MemorySegment segment, int address)
         {
             switch (segment)
             {
-                case MemorySegments.LOCAL:
+                case MemorySegment.LOCAL:
                     return PopMemoryTemplate.ToLocalAssembly(address);
-                case MemorySegments.ARGUMENT:
+                case MemorySegment.ARGUMENT:
                     return PopMemoryTemplate.ToArgumentAssembly(address);
-                case MemorySegments.THIS:
+                case MemorySegment.THIS:
                     return PopMemoryTemplate.ToThisAssembly(address);
-                case MemorySegments.THAT:
+                case MemorySegment.THAT:
                     return PopMemoryTemplate.ToThatAssembly(address);
-                case MemorySegments.CONSTANT:
+                case MemorySegment.CONSTANT:
                     throw new InvalidDataException("Cannot perform POP command for constant memory segment");
-                case MemorySegments.STATIC:
+                case MemorySegment.STATIC:
                     return PopMemoryTemplate.ToStaticAssembly(prefix, address);
-                case MemorySegments.POINTER:
+                case MemorySegment.POINTER:
                     return PopMemoryTemplate.ToPointerAssembly(address);
-                case MemorySegments.TEMP:
+                case MemorySegment.TEMP:
                     return PopMemoryTemplate.ToTempAssembly(address);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(segment), segment, null);
             }
         }
 
-        private string PushCommandToAssembly(string prefix, MemorySegments segment, int value)
+        private string PushCommandToAssembly(string prefix, MemorySegment segment, int value)
         {
             switch (segment)
             {
-                case MemorySegments.LOCAL:
+                case MemorySegment.LOCAL:
                     return PushMemoryTemplate.ToLocalAssembly(value);
-                case MemorySegments.ARGUMENT:
+                case MemorySegment.ARGUMENT:
                     return PushMemoryTemplate.ToArgumentAssembly(value);
-                case MemorySegments.THIS:
+                case MemorySegment.THIS:
                     return PushMemoryTemplate.ToThisAssembly(value);
-                case MemorySegments.THAT:
+                case MemorySegment.THAT:
                     return PushMemoryTemplate.ToThatAssembly(value);
-                case MemorySegments.CONSTANT:
+                case MemorySegment.CONSTANT:
                     return PushMemoryTemplate.ToConstantAssembly(value);
-                case MemorySegments.STATIC:
+                case MemorySegment.STATIC:
                     return PushMemoryTemplate.ToStaticAssembly(prefix, value);
-                case MemorySegments.POINTER:
+                case MemorySegment.POINTER:
                     return PushMemoryTemplate.ToPointerAssembly(value);
-                case MemorySegments.TEMP:
+                case MemorySegment.TEMP:
                     return PushMemoryTemplate.ToTempAssembly(value);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(segment), segment, null);

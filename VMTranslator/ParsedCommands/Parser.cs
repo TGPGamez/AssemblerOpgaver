@@ -34,7 +34,7 @@ namespace VMTranslator.ParsedCommands
         private static bool TryParseToLogicCMD(string[] splitLine, int uniqueId, out BaseVMCommand? parsedCommand)
         {
             string command = splitLine[0].ToUpper();
-            if (Enum.TryParse(command, out BasicCommandsTypes logicalCommandType))
+            if (Enum.TryParse(command, out BasicCommandsType logicalCommandType))
             {
                 {
                     parsedCommand = new BasicLogicalCommands(logicalCommandType);
@@ -42,7 +42,7 @@ namespace VMTranslator.ParsedCommands
                 }
             }
 
-            if (Enum.TryParse(command, out ConditionalCommandTypes conditionalLogicCommandType))
+            if (Enum.TryParse(command, out ConditionalCommandType conditionalLogicCommandType))
             {
                 {
                     parsedCommand = new ConditionalLogicCommand(uniqueId, conditionalLogicCommandType);
@@ -57,9 +57,9 @@ namespace VMTranslator.ParsedCommands
         private static bool TryParseMemoryAccessCMD(string[] splitLine, string prefix, out BaseVMCommand? memoryAccessCommand)
         {
             string memoryAccessCommandString = splitLine[0].ToUpper();
-            if (Enum.TryParse(memoryAccessCommandString, out MemoryAccessCommandTypes memoryAccessCommandsTypes))
+            if (Enum.TryParse(memoryAccessCommandString, out MemoryAccessCommandType memoryAccessCommandsTypes))
             {
-                var memorySegment = Enum.Parse<MemorySegments>(splitLine[1].ToUpper());
+                var memorySegment = Enum.Parse<MemorySegment>(splitLine[1].ToUpper());
                 var value = int.Parse(splitLine[2]);
                 {
                     memoryAccessCommand = new MemoryAccessCommand(value, prefix, memoryAccessCommandsTypes, memorySegment);
@@ -75,7 +75,7 @@ namespace VMTranslator.ParsedCommands
         private static bool TryParseBranchingCMD(string[] lineSplit, out BaseVMCommand? branchingCommand)
         {
             if (Enum.TryParse(lineSplit[0].ToUpper().Replace("-", "_"),
-                    out BranchingCommandTypes branchingCommandType))
+                    out BranchingCommandType branchingCommandType))
             {
                 branchingCommand = new BranchingCommand(lineSplit[1], branchingCommandType);
                 return true;

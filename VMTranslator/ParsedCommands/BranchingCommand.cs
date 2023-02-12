@@ -5,9 +5,9 @@ namespace VMTranslator.ParsedCommands
     internal class BranchingCommand : BaseVMCommand
     {
         private string value;
-        private BranchingCommandTypes branchingCommandType;
+        private BranchingCommandType branchingCommandType;
 
-        public BranchingCommand(string value, BranchingCommandTypes branchingCommandType)
+        public BranchingCommand(string value, BranchingCommandType branchingCommandType)
         {
             this.value = value;
             this.branchingCommandType = branchingCommandType;
@@ -17,11 +17,11 @@ namespace VMTranslator.ParsedCommands
         {
             switch (branchingCommandType)
             {
-                case BranchingCommandTypes.GOTO:
+                case BranchingCommandType.GOTO:
                     return BranchingTemplates.GoToToAssembly(value);
-                case BranchingCommandTypes.IF_GOTO:
+                case BranchingCommandType.IF_GOTO:
                     return BranchingTemplates.IfGoToToAssembly(value);
-                case BranchingCommandTypes.LABEL:
+                case BranchingCommandType.LABEL:
                     return BranchingTemplates.LabelToAssembly(value);
                 default:
                     throw new ArgumentOutOfRangeException();
