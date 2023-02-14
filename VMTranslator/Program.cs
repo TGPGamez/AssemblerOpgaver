@@ -57,11 +57,20 @@ namespace VMTranslator
         {
             string fileName = Path.GetFileNameWithoutExtension(path) + ".asm";
             string directory = Path.GetDirectoryName(path);
+            
             if (directory != null)
             {
-                return directory + "\\" + fileName;
+                DirectoryInfo directoryInfo = new DirectoryInfo(directory);
+                if (fileName != ".asm")
+                {
+                    return directoryInfo.FullName + "\\" + fileName;
+                }
+                else
+                {
+                    return directoryInfo.FullName + "\\" + directoryInfo.Name + ".asm";
+                }
             }
-            return fileName;
+            return fileName == null ? "UnknownFileName.asm" : fileName;
         }
 
         //private static void Menu()

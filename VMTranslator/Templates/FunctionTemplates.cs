@@ -35,8 +35,7 @@ D=0
 
         public static string CallToAssembly(string functionName, uint numberOfArgs, uint index)
         {
-            // Caller has already PUSHED the values of the arguments onto the stack, which is assumed in the
-            // translation
+            // Caller has already PUSHED the values of the arguments onto the stack, which is assumed in the translation
             return $@"
 @RETURN_ADDR_{index}
 D=A
