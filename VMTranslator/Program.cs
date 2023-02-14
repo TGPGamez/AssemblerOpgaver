@@ -23,7 +23,7 @@ namespace VMTranslator
                 Console.Clear();
                 Console.Write("Path: ");
                 path = Console.ReadLine().Replace("/", "\\");
-            } while (FileHandler.FileExists(path) == false);
+            } while (string.IsNullOrEmpty(path) ||string.IsNullOrWhiteSpace(path));
             string outputFile = TransformToOutputFile(path);
             Run(path, outputFile);
 
@@ -55,7 +55,7 @@ namespace VMTranslator
 
         private static string TransformToOutputFile(string path)
         {
-            string fileName = Path.GetFileNameWithoutExtension(path) + "-out.asm";
+            string fileName = Path.GetFileNameWithoutExtension(path) + ".asm";
             string directory = Path.GetDirectoryName(path);
             if (directory != null)
             {

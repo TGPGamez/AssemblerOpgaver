@@ -11,19 +11,32 @@ namespace VMTranslator.ParsedCommands
     {
         public static BaseVMCommand ToParsedCommand(this string line, int uniqueId, string prefix)
         {
-            string[] split = line.Split(' ');
+            string[] lineSplit = line.Split(' ');
 
-            if (TryParseToLogicCMD(split, uniqueId, out BaseVMCommand? parsedCommand)) { }
-            if (parsedCommand != null) { return parsedCommand; }
+            BaseVMCommand? logicCommand = TryParseToLogicCommand(lineSplit, uniqueId);
+            if (logicCommand != null) { return logicCommand; }
 
-            if (TryParseMemoryAccessCMD(split, prefix, out BaseVMCommand? memoryAccessCommand)) { }
-            if (memoryAccessCommand != null) { return memoryAccessCommand; }
+            BaseVMCommand? memoryCommand = TryParseMemoryAccessCommand(lineSplit, prefix);
+            if (memoryCommand != null) { return memoryCommand; }
 
-            if (TryParseBranchingCMD(split, out var branchingCommand)) { }
-            if (branchingCommand != null) return branchingCommand;
+            BaseVMCommand? branchingCommand = TryParseBranchingCommand(lineSplit);
+            if (branchingCommand != null) { return branchingCommand; }
 
-            if (TryParseFunctionCMD(split, uniqueId, out var functionCommand)) { }
-            if (functionCommand != null) return functionCommand;
+            BaseVMCommand? functionCommand = TryParseFunctionCommand(lineSplit, uniqueId);
+            if (functionCommand != null) { return functionCommand; }
+
+
+            //if (TryParseToLogicCMD(lineSplit, uniqueId, out BaseVMCommand? parsedCommand)) { }
+            //if (parsedCommand != null) { return parsedCommand; }
+
+            //if (TryParseMemoryAccessCMD(lineSplit, prefix, out BaseVMCommand? memoryAccessCommand)) { }
+            //if (memoryAccessCommand != null) { return memoryAccessCommand; }
+
+            //if (TryParseBranchingCMD(lineSplit, out var branchingCommand)) { }
+            //if (branchingCommand != null) return branchingCommand;
+
+            //if (TryParseFunctionCMD(lineSplit, uniqueId, out var functionCommand)) { }
+            //if (functionCommand != null) return functionCommand;
 
             throw new ArgumentException($"{line} is not a supported vm instruction.");
         }
@@ -31,30 +44,26 @@ namespace VMTranslator.ParsedCommands
 
 
 
-        private static bool TryParseToLogicCMD(string[] splitLine, int uniqueId, out BaseVMCommand? parsedCommand)
+
+        private static BaseVMCommand? TryParseToLogicCommand(string[] splitLine, int uniqueId)
         {
             string command = splitLine[0].ToUpper();
             if (Enum.TryParse(command, out BasicCommandsType logicalCommandType))
             {
                 {
-                    parsedCommand = new BasicLogicalCommands(logicalCommandType);
-                    return true;
+                    return new BasicLogicalCommands(logicalCommandType);
                 }
             }
-
-            if (Enum.TryParse(command, out ConditionalCommandType conditionalLogicCommandType))
+            else if (Enum.TryParse(command, out ConditionalCommandType conditionalLogicCommandType))
             {
-                {
-                    parsedCommand = new ConditionalLogicCommand(uniqueId, conditionalLogicCommandType);
-                    return true;
-                }
+                return new ConditionalLogicCommand(uniqueId, conditionalLogicCommandType);
+            } else
+            {
+                return null;
             }
-
-            parsedCommand = null;
-            return false;
         }
 
-        private static bool TryParseMemoryAccessCMD(string[] splitLine, string prefix, out BaseVMCommand? memoryAccessCommand)
+        private static BaseVMCommand? TryParseMemoryAccessCommand(string[] splitLine, string prefix)
         {
             string memoryAccessCommandString = splitLine[0].ToUpper();
             if (Enum.TryParse(memoryAccessCommandString, out MemoryAccessCommandType memoryAccessCommandsTypes))
@@ -62,30 +71,24 @@ namespace VMTranslator.ParsedCommands
                 var memorySegment = Enum.Parse<MemorySegment>(splitLine[1].ToUpper());
                 var value = int.Parse(splitLine[2]);
                 {
-                    memoryAccessCommand = new MemoryAccessCommand(value, prefix, memoryAccessCommandsTypes, memorySegment);
-                    return true;
+                    return new MemoryAccessCommand(value, prefix, memoryAccessCommandsTypes, memorySegment);
                 }
             }
 
-            memoryAccessCommand = null;
-            return false;
+            return null;
         }
 
-
-        private static bool TryParseBranchingCMD(string[] lineSplit, out BaseVMCommand? branchingCommand)
+        private static BaseVMCommand? TryParseBranchingCommand(string[] lineSplit)
         {
             if (Enum.TryParse(lineSplit[0].ToUpper().Replace("-", "_"),
                     out BranchingCommandType branchingCommandType))
             {
-                branchingCommand = new BranchingCommand(lineSplit[1], branchingCommandType);
-                return true;
+                return new BranchingCommand(lineSplit[1], branchingCommandType);
             }
-            branchingCommand = null;
-            return false;
+            return null;
         }
 
-        private static bool TryParseFunctionCMD(string[] lineSplit, int uniqueCommandIndentifer,
-        out BaseVMCommand? functionCommand)
+        private static BaseVMCommand? TryParseFunctionCommand(string[] lineSplit, int uniqueCommandIndentifer)
         {
             if (Enum.TryParse(lineSplit[0].ToUpper().Replace("-", "_"),
                     out FunctionCommandTypes functionCommandTypes))
@@ -93,21 +96,95 @@ namespace VMTranslator.ParsedCommands
                 switch (functionCommandTypes)
                 {
                     case FunctionCommandTypes.CALL:
-                        functionCommand = new CallFunctionCommand(lineSplit[1], uint.Parse(lineSplit[2]), (uint)uniqueCommandIndentifer);
-                        break;
+                        return new CallFunctionCommand(lineSplit[1], uint.Parse(lineSplit[2]), (uint)uniqueCommandIndentifer);
                     case FunctionCommandTypes.FUNCTION:
-                        functionCommand = new FunctionFunctionCommand(lineSplit[1], uint.Parse(lineSplit[2]), (uint)uniqueCommandIndentifer);
-                        break;
+                        return new FunctionFunctionCommand(lineSplit[1], uint.Parse(lineSplit[2]), (uint)uniqueCommandIndentifer);
                     case FunctionCommandTypes.RETURN:
-                        functionCommand = new ReturnFunctionCommand();
-                        break;
+                        return new ReturnFunctionCommand();
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                return true;
             }
-            functionCommand = null;
-            return false;
+            return null;
         }
+
+        //private static bool TryParseToLogicCMD(string[] splitLine, int uniqueId, out BaseVMCommand? parsedCommand)
+        //{
+        //    string command = splitLine[0].ToUpper();
+        //    if (Enum.TryParse(command, out BasicCommandsType logicalCommandType))
+        //    {
+        //        {
+        //            parsedCommand = new BasicLogicalCommands(logicalCommandType);
+        //            return true;
+        //        }
+        //    }
+
+        //    if (Enum.TryParse(command, out ConditionalCommandType conditionalLogicCommandType))
+        //    {
+        //        {
+        //            parsedCommand = new ConditionalLogicCommand(uniqueId, conditionalLogicCommandType);
+        //            return true;
+        //        }
+        //    }
+
+        //    parsedCommand = null;
+        //    return false;
+        //}
+
+        //private static bool TryParseMemoryAccessCMD(string[] splitLine, string prefix, out BaseVMCommand? memoryAccessCommand)
+        //{
+        //    string memoryAccessCommandString = splitLine[0].ToUpper();
+        //    if (Enum.TryParse(memoryAccessCommandString, out MemoryAccessCommandType memoryAccessCommandsTypes))
+        //    {
+        //        var memorySegment = Enum.Parse<MemorySegment>(splitLine[1].ToUpper());
+        //        var value = int.Parse(splitLine[2]);
+        //        {
+        //            memoryAccessCommand = new MemoryAccessCommand(value, prefix, memoryAccessCommandsTypes, memorySegment);
+        //            return true;
+        //        }
+        //    }
+
+        //    memoryAccessCommand = null;
+        //    return false;
+        //}
+
+
+        //private static bool TryParseBranchingCMD(string[] lineSplit, out BaseVMCommand? branchingCommand)
+        //{
+        //    if (Enum.TryParse(lineSplit[0].ToUpper().Replace("-", "_"),
+        //            out BranchingCommandType branchingCommandType))
+        //    {
+        //        branchingCommand = new BranchingCommand(lineSplit[1], branchingCommandType);
+        //        return true;
+        //    }
+        //    branchingCommand = null;
+        //    return false;
+        //}
+
+        //private static bool TryParseFunctionCMD(string[] lineSplit, int uniqueCommandIndentifer,
+        //out BaseVMCommand? functionCommand)
+        //{
+        //    if (Enum.TryParse(lineSplit[0].ToUpper().Replace("-", "_"),
+        //            out FunctionCommandTypes functionCommandTypes))
+        //    {
+        //        switch (functionCommandTypes)
+        //        {
+        //            case FunctionCommandTypes.CALL:
+        //                functionCommand = new CallFunctionCommand(lineSplit[1], uint.Parse(lineSplit[2]), (uint)uniqueCommandIndentifer);
+        //                break;
+        //            case FunctionCommandTypes.FUNCTION:
+        //                functionCommand = new FunctionFunctionCommand(lineSplit[1], uint.Parse(lineSplit[2]), (uint)uniqueCommandIndentifer);
+        //                break;
+        //            case FunctionCommandTypes.RETURN:
+        //                functionCommand = new ReturnFunctionCommand();
+        //                break;
+        //            default:
+        //                throw new ArgumentOutOfRangeException();
+        //        }
+        //        return true;
+        //    }
+        //    functionCommand = null;
+        //    return false;
+        //}
     }
 }
