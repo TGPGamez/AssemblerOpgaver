@@ -11,18 +11,18 @@ namespace VMTranslator.ParsedCommands
     {
         public static BaseVMCommand ToParsedCommand(this string line, int uniqueId, string prefix)
         {
-            string[] lineSplit = line.Split(' ');
+            string[] splitLine = line.Split(' ');
 
-            BaseVMCommand? logicCommand = TryParseToLogicCommand(lineSplit, uniqueId);
+            BaseVMCommand? logicCommand = TryParseToLogicCommand(splitLine, uniqueId);
             if (logicCommand != null) { return logicCommand; }
 
-            BaseVMCommand? memoryCommand = TryParseMemoryAccessCommand(lineSplit, prefix);
+            BaseVMCommand? memoryCommand = TryParseMemoryAccessCommand(splitLine, prefix);
             if (memoryCommand != null) { return memoryCommand; }
 
-            BaseVMCommand? branchingCommand = TryParseBranchingCommand(lineSplit);
+            BaseVMCommand? branchingCommand = TryParseBranchingCommand(splitLine);
             if (branchingCommand != null) { return branchingCommand; }
 
-            BaseVMCommand? functionCommand = TryParseFunctionCommand(lineSplit, uniqueId);
+            BaseVMCommand? functionCommand = TryParseFunctionCommand(splitLine, uniqueId);
             if (functionCommand != null) { return functionCommand; }
 
 
