@@ -21,11 +21,12 @@ namespace VMTranslator
             do
             {
                 Console.Clear();
+                DefaultInfo();
                 Console.Write("Path: ");
                 path = Console.ReadLine().Replace("/", "\\");
             } while (string.IsNullOrEmpty(path) ||string.IsNullOrWhiteSpace(path));
             string outputFile = TransformToOutputFile(path);
-            Run(path, outputFile);
+            StartProcess(path, outputFile);
 
             //Console.WriteLine("Input path: ");
             //Console.WriteLine(" - " + path);
@@ -35,7 +36,7 @@ namespace VMTranslator
             //Console.WriteLine(" - " + outputFile);
         }
 
-        private static void Run(string inputPath, string outputPath)
+        private static void StartProcess(string inputPath, string outputPath)
         {
             try
             {
@@ -51,6 +52,15 @@ namespace VMTranslator
             {
                 Console.WriteLine($"An unexpected error occured...{e}");
             }
+        }
+
+        private static void DefaultInfo()
+        {
+            Console.WriteLine("How path works:");
+            Console.WriteLine("- If the path is a directory, it will look");
+            Console.WriteLine(" for all .vm files in the directory\n");
+            Console.WriteLine("- You can also target a specific vm file by");
+            Console.WriteLine(" writting file name and the extension\n");
         }
 
         private static string TransformToOutputFile(string path)
